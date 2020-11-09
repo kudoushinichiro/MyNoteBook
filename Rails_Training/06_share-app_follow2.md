@@ -1,5 +1,8 @@
+途中よくわからないところがあったので、デバックの備忘録
+
 user.rbに<<idをしているケース
 
+```
 Processing by PostsController#index as HTML
   User Load (0.3ms)  SELECT  `users`.* FROM `users` WHERE `users`.`id` = 18 LIMIT 1
   ↳ app/controllers/posts_controller.rb:12
@@ -48,10 +51,11 @@ Processing by PostsController#index as HTML
   Rendered users/_follow_area.html.slim (2.4ms)
   User Exists (0.3ms)  SELECT  1 AS one FROM `users` INNER JOIN `relationships` ON `users`.`id` = `relationships`.`followed_id` WHERE `relationships`.`follower_id` = 18 AND `users`.`id` = 15 LIMIT 1
   ↳ app/models/user.rb:88
-
+```
 
 <<idをしていない
 
+```
 Processing by PostsController#index as HTML
   User Load (0.2ms)  SELECT  `users`.* FROM `users` WHERE `users`.`id` = 18 LIMIT 1
   ↳ app/controllers/posts_controller.rb:12
@@ -100,23 +104,31 @@ Processing by PostsController#index as HTML
   Rendered users/_follow_area.html.slim (1.2ms)
   User Exists (0.2ms)  SELECT  1 AS one FROM `users` INNER JOIN `relationships` ON `users`.`id` = `relationships`.`followed_id` WHERE `relationships`.`follower_id` = 18 AND `users`.`id` = 15 LIMIT 1
   ↳ app/models/user.rb:88
-
+```
 
 18が自分のid
 <<idした時
+
+```
 SELECT `users`.`id` FROM `users` INNER JOIN `relationships` ON `users`.`id` = `relationships`.`followed_id` WHERE `relationships`.`follower_id` = 18
   ↳ app/models/user.rb:95
 SELECT  `posts`.* FROM `posts` WHERE `posts`.`user_id` IN (1, 18) ORDER BY `posts`.`created_at` DESC LIMIT 15 OFFSET 0
   ↳ app/views/posts/index.html.slim:7
+```
 
+```
 <<外した時（エラー）
 SELECT `users`.`id` FROM `users` INNER JOIN `relationships` ON `users`.`id` = `relationships`.`followed_id` WHERE `relationships`.`follower_id` = 18
   ↳ app/models/user.rb:95
 SELECT  `posts`.* FROM `posts` WHERE `posts`.`user_id` = 1 ORDER BY `posts`.`created_at` DESC LIMIT 15 OFFSET 0
   ↳ app/views/posts/index.html.slim:7
+```
 
 <<17とした時
+
+```
 SELECT `users`.`id` FROM `users` INNER JOIN `relationships` ON `users`.`id` = `relationships`.`followed_id` WHERE `relationships`.`follower_id` = 18
   ↳ app/models/user.rb:95
 SELECT  `posts`.* FROM `posts` WHERE `posts`.`user_id` IN (1, 17) ORDER BY `posts`.`created_at` DESC LIMIT 15 OFFSET 0
   ↳ app/views/posts/index.html.slim:7
+```
