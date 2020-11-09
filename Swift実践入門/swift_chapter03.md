@@ -54,3 +54,34 @@ print(".none: \(String(describing: none))")
 let some = Optional<Int>.some(1)
 print(".some: \(String(describing: some))")
 
+
+### nilリテラルにはデフォルトの型はない！
+```swift
+let a = 5
+let b = "あいう"
+
+type(of: a) // Int.Type
+type(of: b) // String.Type
+```
+
+数字や文字列はデフォルトでIntやStringといった型があてられるが、
+nilの場合はそれがないので、しっかり型宣言しないとコンパイルエラーとなる。
+
+```swift
+let c = nil // エラー 'nil' requires a contextual typeというエラーがでる。
+```
+
+ではこれではどうか？
+
+```swift
+let c: Int = nil // エラー 'nil' cannot initialize specified type 'Int'
+                 // エラー Add '?' to form the optional type 'Int?'
+```
+nilを許容するためにOpitional型を適用させなければならない。
+
+```swift
+let c: Int? = nil // nil
+type(of: c) // Optional<Int>.Type
+```
+
+これでnilが入った'c'はOptional<Int>型として扱われるようになる。
