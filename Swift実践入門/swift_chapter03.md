@@ -1,7 +1,7 @@
 Swift実践入門メモ
-## 第３章　基本的な型
+# 第３章 基本的な型
 
-### import Foundation
+## import Foundation
 標準ライブラリでは出来ない操作を可能とするコアライブラリ。
 
 rangeメソッド
@@ -25,12 +25,12 @@ https://developer.apple.com/documentation/foundation/nsstring/1414082-compare
 順序含む文字列の一致をtrue/falseで返す。
 
 
-#### 上記の比較文が長ったらしく感じたので、短くしてみた①
+### 上記の比較文が長ったらしく感じたので、短くしてみた①
 ```swift
 let order2 = "abc".compare("aBc", options: String.CompareOptions.caseInsensitive)
 order == ComparisonResult.orderedSame
 ```
-#### 上記の比較文が長ったらしく感じたので、短くしてみた②
+### 上記の比較文が長ったらしく感じたので、短くしてみた②
 ```swift
 "abc".compare("Abc", options: String.CompareOptions.caseInsensitive) == ComparisonResult.orderedSame
 ```
@@ -39,7 +39,7 @@ order == ComparisonResult.orderedSame
 
 
 
-### 3.5 optional型についての項目
+## 3.5 optional型についての項目
 
 // Optional型は列挙型として以下のように定義されている。
 enum Optional<wrapped> {
@@ -55,7 +55,7 @@ let some = Optional<Int>.some(1)
 print(".some: \(String(describing: some))")
 
 
-### nilリテラルにはデフォルトの型はない！
+## nilリテラルにはデフォルトの型はない！
 ```swift
 let a = 5
 let b = "あいう"
@@ -85,3 +85,61 @@ type(of: c) // Optional<Int>.Type
 ```
 
 これでnilが入った'c'はOptional<Int>型として扱われるようになる。
+
+
+## イニシャライザによる型の生成
+
+まず、単なるString型からInt型へのイニシャライザを考えてみる。
+```swift
+let str = "123"    // "123"
+type(of: str)      // String.Type
+
+let int = Int(str) // 123
+type(of: int)      // Optional<Int>.Type
+```
+イニシャライザされたintはオプショナル型として扱われている。
+これは、数値への変換が不可能な文字列を渡された場合に、nilを返すためである。
+
+```swift
+let str = "1ab"       // "1ab"
+type(of: str)         // String.Type
+
+let ngInt = Int(str)  // nil
+type(of: ngInt)       // Optional<Int>.Type
+```
+
+テキストの内容
+```swift
+let optionalInt = Optional(1)   // 1
+print(type(of: optionalInt), String(describing: optionalInt))   // "Optional<Int> Optional(1)\n"
+
+let optionalString = Optional("a")   // "a"
+print(type(of: optionalString), String(describing: optionalString))   // "Optional<String> Optional("a")\n"
+```
+
+### 試してみた
+この見本の一文をちょっと変えてみた。
+```swift
+let optionalString = Optional("a")   // "a"
+print(optionalString)   // "Optional("a")\n"
+```
+
+しかし、上記print文に、`Expression implicitly coerced from 'String?' to 'Any'`という警告がでてしまった。
+```
+Expression implicitly coerced from 'String?' to 'Any'
+
+FIX1   Provide a default value to avoid this warning
+FIX2   Force-unwrap the value to avoid this warning
+FIX3   Explicitly cast to 'Any' with 'as Any' to silence this warning
+```
+
+単に文字列"a"が出力されることを期待していたのだが、上記３つのどれかでFIXしなさいと言われている。
+一つずつ試してみた。
+```swift
+print(optionalString ?? <#default value#>)   // FIX1の実行結果
+print(optionalString!)                       // FIX2の実行結果
+print(optionalString as Any)                 // FIX3の実行結果
+```
+
+よけいなことに首を突っ込んでしまった感があるので、とりあえず先に進むことにする。
+基礎知識を入れ終わったあたりで深掘りしてみようと思う。
