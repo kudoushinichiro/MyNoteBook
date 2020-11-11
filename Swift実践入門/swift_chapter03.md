@@ -28,7 +28,7 @@ https://developer.apple.com/documentation/foundation/nsstring/1414082-compare
 ### 上記の比較文が長ったらしく感じたので、短くしてみた①
 ```swift
 let order2 = "abc".compare("aBc", options: String.CompareOptions.caseInsensitive)
-order == ComparisonResult.orderedSame
+order2 == ComparisonResult.orderedSame
 ```
 ### 上記の比較文が長ったらしく感じたので、短くしてみた②
 ```swift
