@@ -175,7 +175,7 @@ let int = optionalInt ?? 3 // 1(値が存在なしない場合のみ3が代入�
 
 ```swift
 let optionalInt: Int? = nil // nil
-let int = optionalInt ?? 3 // 3(値が存在なしないので3が代入されている)
+let int = optionalInt ?? 3 // 3(値が存在しないので3が代入されている)
 ```
 このように??演算子の後ろにデフォルト値を設定することでnilを回避することができ、安全に値を取り出すことができる。
 
