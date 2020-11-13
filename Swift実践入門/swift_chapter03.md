@@ -143,3 +143,71 @@ print(optionalString as Any)                 // FIX3の実行結果
 
 よけいなことに首を突っ込んでしまった感があるので、とりあえず先に進むことにする。
 基礎知識を入れ終わったあたりで深掘りしてみようと思う。
+
+
+## アンラップ(値の取り出し)
+Optional<Wrapped>型の値が持つWrapped型の値に対する操作を行うには、Optional<Wrapped>型の値の中からWrapped型の値を取り出す必要がある。
+
+これを**アンラップ**という。
+
+## アンラップの種類
+### ①オプショナルバインディング
+条件分岐や繰り返し文の条件にOptional<Wrapped>型の値を指定する。
+if let文を用いて値が存在する場合のみ{}内の処理を実行するというやり方で値を取り出す。
+nilの場合は処理をスキップすることにより、nilによるコンパイルエラーを安全に回避することができる。
+
+```swift
+let optionalA = Optional("a")
+
+if let aStr = optionalA {
+    print(type(of: aStr))
+}
+// String\n
+```
+
+### ②??演算子
+値が存在しない場合にデフォルト値を設定することができる演算子。
+
+```swift
+let optionalInt: Int? = 1 // 1
+let int = optionalInt ?? 3 // 1(値が存在なしない場合のみ3が代入される)
+```
+
+```swift
+let optionalInt: Int? = nil // nil
+let int = optionalInt ?? 3 // 3(値が存在なしないので3が代入されている)
+```
+このように??演算子の後ろにデフォルト値を設定することでnilを回避することができ、安全に値を取り出すことができる。
+
+
+### ③強制アンラップ
+!演算子を使うことにより、強制的に値を取り出す処理をいう。
+強制的に取り出すので、値が存在しない場合はエラーとなってしまう。
+
+値が存在する場合↓
+
+```swift
+let a: Int? = 1 // 1
+let b: Int? = 1 // 1
+
+a! + b! // 2
+```
+
+2が出力される。
+
+値が存在しない場合↓
+```swift
+let a: Int? = 1 // 1
+let b: Int? = nil // nil
+
+a! + b! // error
+```
+エラーとなる。
+```
+error: Execution was interrupted, reason: EXC_BAD_INSTRUCTION 
+(code=EXC_I386_INVOP, subcode=0x0).
+The process has been left at the point where it was interrupted, use "thread return -x" to return to the state before expression evaluation.
+```
+
+強制アンラップは実行時エラーが発生してしまう危険性やがあり、swiftの特徴でもある安全性を低下させるプログラムコードとなってしまうので、使用することは推奨されていない。
+(値が存在しない場合はプログラムを落としたい時など、限定された状況のみの使用が想定される)
