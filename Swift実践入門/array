@@ -1,0 +1,105 @@
+## メモ
+データを持たせて外部からとりだす
+
+## 中身がひとつの場合
+
+### ①基本形
+この形をベースに考えていきたい。
+
+```swift
+import Foundation
+
+struct Food {
+    let name: String
+    let price: Int
+    
+    static func creteDefaultFoods() -> Food {
+        return Food(name: "Apple", price: 200)
+    }
+}
+
+// 呼び出し
+var item = Food.creteDefaultFoods()  // Food
+item.name  // "Apple"
+```
+## 中身が複数の場合
+### ②複数のインスタンスを定義してから配列に加える
+
+```swift
+import Foundation
+
+struct Food {
+    let name: String
+    let price: Int
+
+    static func creteDefaultFoods() -> [Food] {
+        
+        let obj1 = Food(name: "Apple", price: 200)
+        let obj2 = Food(name: "Orange", price: 120)
+        let obj3 = Food(name: "Banana", price: 65)
+        
+        let arr : [Food] = [obj1, obj2, obj3]
+    
+        return arr
+    }
+}
+
+// 呼び出し
+var item = Food.creteDefaultFoods()
+item[1].name // "Orange"
+```
+
+### ③appendで配列に追加していくパターン
+直接配列に放り込みます。
+
+```swift
+import Foundation
+
+struct Food {
+    let name: String
+    let price: Int
+
+    static func creteDefaultFoods() -> [Food] {
+        
+        var arr: [Food] = []
+    
+        arr.append(Food(name: "Apple",  price: 200))
+        arr.append(Food(name: "Orange", price: 120))
+        arr.append(Food(name: "Banana", price: 65))
+        arr.append(Food(name: "Grape",  price: 400))
+
+        return arr
+    }
+}
+
+// 呼び出し
+var item = Food.creteDefaultFoods()
+item[1].name // "Orange"
+```
+
+### ④配列にそのまま突っ込む
+
+```swift
+import Foundation
+
+struct Food: Codable {
+  let name: String
+  let price: Int
+    
+    static func createDefaultFoods() -> [Food] {
+        
+        let arr = [
+          Food(name: "Apple", price: 200),
+          Food(name: "Orange", price: 120),
+          Food(name: "Banana", price: 65),
+          Food(name: "Grape", price: 400)
+        ]
+        
+        return arr
+    }
+}
+
+// 呼び出し
+var items = Food.createDefaultFoods()
+items[1].name // "Orange"
+```
