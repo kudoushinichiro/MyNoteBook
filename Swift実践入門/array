@@ -103,3 +103,34 @@ struct Food: Codable {
 var items = Food.createDefaultFoods()
 items[1].name // "Orange"
 ```
+
+### 辞書型で定義
+
+```swift
+import Foundation
+
+struct Item: Codable {
+    let id: Int
+    let title: String
+    
+    static func createDefaultItems() -> [Item] {
+        let dictionaries: [[String: Any]] = [
+            ["id": 1, "title": "abc"],
+            ["id": 2, "title": "def"]
+        ]
+        
+        guard let dic = try? JSONSerialization.data(withJSONObject: dictionaries, options: []),
+              let data = try? JSONDecoder().decode([Item].self, from: dic)
+        else {
+            fatalError()
+        }
+        
+        return data
+    }
+    
+}
+
+var item = Item.createDefaultItems()
+item[1].title
+```
+
