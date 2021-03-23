@@ -114,3 +114,12 @@ variable.id // 4
 ```
 mutatingをつけないとエラーが出る
 `Cannot assign to property: 'self' is immutable`
+
+
+## クラスとは
+
+### 構造体との違い
+1. 参照型であること
+2. 継承ができること
+
+
